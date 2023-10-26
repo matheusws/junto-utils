@@ -4,9 +4,15 @@ import re, os, utils, files, myLogging, constants
 #todo: validar formato do arquivo csv
 #todo: replace para projetos em C#
 #todo: replace para projetos em node
+#todo: deletar backup?
+
+files.createAppFoldersAndFiles()
 
 projects = files.readProjects()
 replacements = files.readReplacements()
+
+if len(projects) <= 0 or len(replacements) <=0:
+    myLogging.logError("Um dos arquivos de entrada esta vazio")
 
 for project in projects:
     projectPath = utils.convertWindowsToUnixPath(project) if utils.isLinux() else project

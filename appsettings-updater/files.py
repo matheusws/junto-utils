@@ -1,5 +1,25 @@
 import os, shutil, csv, constants
 
+def createAppFoldersAndFiles():
+    folders = [constants.BACKUP_FOLDER,
+               constants.TMP_FOLDER,
+               constants.INPUT_FOLDER]
+    files = [constants.PROJECTS_FILE,
+             constants.REPLACEMENTS_FILE]
+
+    for folder in folders:
+        folderPath = os.path.join(constants.CURRENT_PATH, folder)
+        if not os.path.exists(folderPath):
+            os.mkdir(folderPath)
+    
+    for file in files:
+        filePath = os.path.join(constants.CURRENT_PATH, constants.INPUT_FOLDER, file)
+        if not os.path.exists(filePath):
+            newFile = open(filePath, "w")
+            if file == constants.REPLACEMENTS_FILE:
+                newFile.write("original,replacement\n")
+            newFile.close()
+
 def readFileContent(filePath):
     file = open(filePath, "r")
     fileContent = file.read()
@@ -9,10 +29,15 @@ def readFileContent(filePath):
 
 def readProjects():
     projectsPath = os.path.join(constants.CURRENT_PATH, constants.INPUT_FOLDER, constants.PROJECTS_FILE)
-    return readFileContent(projectsPath).split("\n")
+    projects = readFileContent(projectsPath)
+
+    if len(projects) > 0:
+        return projects.split("\n")
+    
+    return []
 
 def readReplacements():
-    replacementsPath = os.path.join(constants.CURRENT_PATH, constants.INPUT_FOLDER, constants.REPLACEMENT_FILE)
+    replacementsPath = os.path.join(constants.CURRENT_PATH, constants.INPUT_FOLDER, constants.REPLACEMENTS_FILE)
     fileContent = []
 
     with open(replacementsPath, newline='\n') as replacementsFile:
